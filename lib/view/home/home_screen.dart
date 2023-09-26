@@ -104,7 +104,10 @@ class _HomePageState extends State<HomePage> {
                                 DataBase.quizData[QuesNo]['options'][index],
                                 style: TextStyle(
                                     fontSize: 18,
-                                    color: Colors.black),
+                                    color: value == index
+                                        ? Colors.white
+                                        : Colors.black
+                                        ),
                               ),
                             ),
 
