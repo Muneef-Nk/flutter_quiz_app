@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../utils/color_constant/color_constant.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../home/home_screen.dart';
 
 class Score extends StatelessWidget {
@@ -25,11 +25,22 @@ class Score extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 20,),
+
+                new CircularPercentIndicator(
+                  radius: 60.0,
+                  lineWidth: 5.0,
+                  percent: ans/10,
+                  center: new Text("$ans/10", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  progressColor: Colors.green,
+                  backgroundColor: Colors.red,
+                ),
+
+                SizedBox(height: 20,),
                 Text(
                   "Correct Answers : $ans",
                   style: TextStyle(
                       fontSize: 16,
-                      color: Colors.black,
+                      color: Colors.green,
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -39,7 +50,7 @@ class Score extends StatelessWidget {
                   "Wrong Answers : ${10 - ans}",
                   style: TextStyle(
                       fontSize: 16,
-                      color: Colors.black,
+                      color: Colors.redAccent,
                       fontWeight: FontWeight.bold),
                 ),
               ],

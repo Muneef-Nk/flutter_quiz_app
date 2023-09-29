@@ -10,17 +10,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int? ans;
-  int? value;
-  int Quescount = 0;
-  int QuesNo = 0;
-  int rAns = 0;
 
   List letter=["A", "B", "C", "D"];
+
+  int qNo=0;
+  int? selectedIndex;
+  int ans =0;
+  bool isSelected=false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: GestureDetector(
+            onTap: (){
+              setState(() {
+                if (qNo>0) {
+                  qNo--;
+                }
+              });
+            },
+            child:qNo>0? Icon(Icons.arrow_back, color: Colors.black,):Text("")),
+      ),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -42,16 +55,17 @@ class _HomePageState extends State<HomePage> {
                         color: Colors.black),
                     textAlign: TextAlign.left,
                   ),
-                  Text(
-                    "${QuesNo + 1}/10",
-                    style: TextStyle(color: Colors.black),
-                  )
+                  Text("${qNo+1}/10", style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey[800]
+                  ),)
+
                 ],
               ),
               SizedBox(height: 15),
               Center(
-                child: Text(
-                  DataBase.quizData[QuesNo]['question'],
+                child: Text(DataBase.quizData[qNo]["question"],
+                  // DataBase.quizData[QuesNo]['question'],
                   style: TextStyle(
                       fontSize: 18,
                       height: 1.5,
@@ -62,97 +76,89 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 height: 40,
               ),
+
               SizedBox(
-                height: 400,
+                height: 300,
                 child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
                   itemCount: 4,
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: InkWell(
-                      onTap: () {
+                    itemBuilder: (context, index){
+                    return GestureDetector(
+                      onTap: (){
                         setState(() {
-                          value = index;
-                          value == DataBase.quizData[QuesNo]['answer']
-                              ? rAns++
-                              : print(value);
+                          selectedIndex=index;
+                          isSelected =true;
+                          selectedIndex== DataBase.quizData[qNo]['answer'] ?ans++:null;
                         });
                       },
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            left: 20, top: 10, bottom: 10, right: 15),
+                      child:Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        width: 200,
+                        height: 50,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border:
-                            Border.all(color: Colors.black),
-                            color: value == index
-                                ? value ==
-                                DataBase.quizData[QuesNo]['answer']
-                                ? Colors.green
-                                : Colors.red
-                                : Colors.transparent
-                          // Changed the comparison
+                          color: selectedIndex==index ? DataBase.quizData[qNo]['answer'] == selectedIndex? Colors.green:Colors.red:Colors.transparent,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all()
                         ),
-                        width: double.infinity,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-
-                            SizedBox(
-                              width:
-                              MediaQuery.of(context).size.width * .50,
-                              child: Text(
-                                DataBase.quizData[QuesNo]['options'][index],
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: value == index
-                                        ? Colors.white
-                                        : Colors.black
-                                        ),
+                            Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.black,
+                                child: Text(letter[index], style: TextStyle(color: Colors.white),),
                               ),
                             ),
-
+                            SizedBox(width: 5,),
+                            SizedBox(
+                                width: 250,
+                                child: Text(DataBase.quizData[qNo]["options"][index], style: TextStyle(fontSize: 15,color: selectedIndex==index ? DataBase.quizData[qNo]['answer'] == selectedIndex? Colors.white:Colors.white:Colors.black ),textAlign: TextAlign.left, )
+                            ),
+                            Visibility(
+                              visible:selectedIndex==index ? DataBase.quizData[qNo]['answer'] == selectedIndex? true:true:false,
+                              child: CircleAvatar(
+                                radius: 20,
+                                backgroundColor:Colors.white,
+                                child:selectedIndex==index ? DataBase.quizData[qNo]['answer'] == selectedIndex? Icon(Icons.check, color: Colors.black,):Icon(Icons.close, color: Colors.black,):null),
+                            )
                           ],
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                    }
                 ),
               ),
-              InkWell(
-                onTap: () {
+              SizedBox(height: 30,),
+              GestureDetector(
+                onTap: (){
                   setState(() {
-                    QuesNo++;
-                    value = 5;
-                    Quescount++;
-
-                    Quescount > 9
-                        ? Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Score(ans: rAns),
-                        ))
-                        : SizedBox();
+                      selectedIndex=5;
+                      if(DataBase.quizData.length-1>qNo){
+                        qNo++;
+                      }else{
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Score(ans: ans,)));
+                      }
                   });
+
+
+
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all()
-                  ),
-                  width: 150,
-                  child: Center(
-                    child: Text(
-                      "Next",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                child:Visibility(
+                  visible: selectedIndex == 0 || selectedIndex ==1 || selectedIndex==2|| selectedIndex==3?true:false,
+                  child: Container(
+                    width: 150,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.black
                     ),
+                    child: Center(child: Text("Next", style: TextStyle(color: Colors.white, fontSize: 20),)),
                   ),
-                  height: 60,
                 ),
-              ),
+              )
+
             ],
           ),
         ),
