@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import '../home/home_screen.dart';
+import 'package:quiz_app/utils/color_constants.dart';
+import 'package:quiz_app/view/quiz_screen/QuizPage.dart';
+import 'package:quiz_app/view/topics/topics_screen.dart';
 
 class Score extends StatelessWidget {
   const Score({super.key, required this.ans});
@@ -8,7 +10,7 @@ class Score extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.black,
+      backgroundColor: primary,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -21,26 +23,34 @@ class Score extends StatelessWidget {
                   "Score",
                   style: TextStyle(
                       fontSize: 30,
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 20,),
-
+                SizedBox(
+                  height: 20,
+                ),
                 new CircularPercentIndicator(
                   radius: 60.0,
                   lineWidth: 5.0,
-                  percent: ans/10,
-                  center: new Text("$ans/10", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  percent: ans / 10,
+                  center: new Text(
+                    "$ans/10",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
                   progressColor: Colors.green,
                   backgroundColor: Colors.red,
                 ),
-
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Text(
                   "Correct Answers : $ans",
                   style: TextStyle(
                       fontSize: 16,
-                      color: Colors.green,
+                      color: Colors.greenAccent,
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
@@ -55,27 +65,25 @@ class Score extends StatelessWidget {
                 ),
               ],
             ),
-            InkWell(
+            GestureDetector(
               onTap: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return HomePage();
-                      },
-                    ));
+                Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) {
+                    return QuizPage();
+                  },
+                ));
               },
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(),
+                  border: Border.all(color: Colors.white),
                 ),
                 width: 150,
                 child: Center(
                   child: Text(
                     "Try Again",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
@@ -84,7 +92,28 @@ class Score extends StatelessWidget {
                 height: 60,
               ),
             ),
-            SizedBox()
+            InkWell(
+              onTap: () {
+                Navigator.pushReplacement(context, MaterialPageRoute(
+                  builder: (context) {
+                    return TopicsScreen();
+                  },
+                ));
+              },
+              child: Center(
+                child: Text(
+                  "Select another topic?",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            )
           ],
         ),
       ),
